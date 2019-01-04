@@ -99,6 +99,7 @@
     <ClInclude Include="device.h" />
     <ClInclude Include="devicefile.h" />
     <ClInclude Include="devicepcileechdll.h" />
+    <ClInclude Include="dmp.h" />
     <ClInclude Include="mm_x64.h" />
     <ClInclude Include="mm_x86.h" />
     <ClInclude Include="mm_x86pae.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="device.c" />
     <ClCompile Include="devicefile.c" />
     <ClCompile Include="devicepcileechdll.c" />
+    <ClCompile Include="dmp.c" />
     <ClCompile Include="mm_x64.c" />
     <ClCompile Include="mm_x86.c" />
     <ClCompile Include="mm_x86pae.c" />

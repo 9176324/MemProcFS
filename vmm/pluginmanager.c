@@ -309,25 +309,25 @@ VOID PluginManager_Initialize_Python()
     VOID(*pfnInitializeVmmPlugin)(_In_ PVMMDLL_PLUGIN_REGINFO pRegInfo);
     // 1: Locate Python by trying user-defined path
     if(ctxMain->cfg.szPythonPath[0]) {
-        ZeroMemory(szPythonPath, MAX_PATH);
-        strcpy_s(szPythonPath, MAX_PATH, ctxMain->cfg.szPythonPath);
-        strcat_s(szPythonPath, MAX_PATH, "\\python36.dll");
+        ZeroMemory(szPythonPath, _countof(szPythonPath));
+        strcpy_s(szPythonPath, _countof(szPythonPath), ctxMain->cfg.szPythonPath);
+        strcat_s(szPythonPath, _countof(szPythonPath), "\\python36.dll");
         hDllPython = LoadLibraryExA(szPythonPath, 0, LOAD_WITH_ALTERED_SEARCH_PATH);
         if(!hDllPython) {
-            ZeroMemory(ctxMain->cfg.szPythonPath, MAX_PATH);
+            ZeroMemory(ctxMain->cfg.szPythonPath, _countof(ctxMain->cfg.szPythonPath));
             vmmprintf("PluginManager: Python initialization failed. Python 3.6 not found on user specified path.\n");
             return;
         }
     }
     // 2: Try locate Python by checking the python36 sub-directory relative to the current executable (.exe).
     if(0 == ctxMain->cfg.szPythonPath[0]) {
-        ZeroMemory(szPythonPath, MAX_PATH);
+        ZeroMemory(szPythonPath, _countof(szPythonPath));
         Util_GetPathDll(szPythonPath, NULL);
-        strcat_s(szPythonPath, MAX_PATH, "python36\\python36.dll");
+        strcat_s(szPythonPath, _countof(szPythonPath), "python36\\python36.dll");
         hDllPython = LoadLibraryExA(szPythonPath, 0, LOAD_WITH_ALTERED_SEARCH_PATH);
         if(hDllPython) {
             Util_GetPathDll(ctxMain->cfg.szPythonPath, NULL);
-            strcat_s(ctxMain->cfg.szPythonPath, MAX_PATH, "python36\\");
+            strcat_s(ctxMain->cfg.szPythonPath, _countof(ctxMain->cfg.szPythonPath), "python36\\");
         }
     }
     // 3: Try locate Python by loading from the current path.
@@ -389,13 +389,13 @@ BOOL PluginManager_Initialize()
     // 2: process dll modules
     Util_GetPathDll(szPath, NULL);
     cchPathBase = (DWORD)strnlen(szPath, MAX_PATH - 1);
-    strcat_s(szPath, MAX_PATH, "plugins\\m_*.dll");
+    strcat_s(szPath, _countof(szPath), "plugins\\m_*.dll");
     hFindFile = FindFirstFileA(szPath, &FindData);
     if(hFindFile != INVALID_HANDLE_VALUE) {
         do {
             szPath[cchPathBase] = '\0';
-            strcat_s(szPath, MAX_PATH, "plugins\\");
-            strcat_s(szPath, MAX_PATH, FindData.cFileName);
+            strcat_s(szPath, _countof(szPath), "plugins\\");
+            strcat_s(szPath, _countof(szPath), FindData.cFileName);
             hDLL = LoadLibraryExA(szPath, 0, 0);
             if(!hDLL) { 
                 vmmprintfvv("PluginManager: FAIL: Load DLL: '%s' - missing dependencies?\n", FindData.cFileName);
